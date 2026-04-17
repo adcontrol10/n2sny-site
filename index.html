@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>N2SNY | Amateur Radio</title>
+<title>N2SNY | Ham Radio Dashboard</title>
 
 <style>
 body {
@@ -13,6 +13,7 @@ body {
   color: #e6edf3;
 }
 
+/* HEADER */
 header {
   background: #161b22;
   padding: 20px;
@@ -26,24 +27,32 @@ header h1 {
   color: #58a6ff;
 }
 
+/* NAV */
 nav {
-  text-align: center;
-  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   background: #21262d;
+  padding: 10px;
+  gap: 10px;
 }
 
 nav a {
   color: #e6edf3;
-  margin: 0 15px;
   text-decoration: none;
+  padding: 8px 12px;
+  background: #30363d;
+  border-radius: 6px;
 }
 
 nav a:hover {
-  color: #58a6ff;
+  background: #58a6ff;
+  color: #000;
 }
 
+/* LAYOUT */
 section {
-  padding: 40px;
+  padding: 20px;
   max-width: 900px;
   margin: auto;
 }
@@ -56,6 +65,7 @@ section {
   border: 1px solid #30363d;
 }
 
+/* BUTTONS */
 button {
   background: #238636;
   color: white;
@@ -69,11 +79,42 @@ button:hover {
   background: #2ea043;
 }
 
-input, textarea {
+/* INPUT */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
   background: #0d1117;
   color: #e6edf3;
   border: 1px solid #30363d;
   border-radius: 5px;
+}
+
+/* STATUS */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 2em;
+  }
+
+  nav a {
+    flex: 1 1 40%;
+    text-align: center;
+  }
 }
 
 footer {
@@ -90,28 +131,35 @@ footer {
 <header>
   <h1>N2SNY</h1>
   <p>Amateur Radio Operator | South Carolina</p>
+
+  <p class="status">
+    <span id="dot" class="dot"></span>
+    <span id="statusText">OFF AIR</span>
+  </p>
+
   <br>
+
+  <button onclick="toggleStatus()">Toggle On Air</button>
+
+  <br><br>
+
   <a href="https://www.qrz.com/db/N2SNY" target="_blank">
-    <button>View My QRZ Profile</button>
+    <button>QRZ Profile</button>
   </a>
 </header>
 
 <nav>
   <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
-  <a href="#log">Radio Log</a>
+  <a href="#lookup">QRZ Lookup</a>
+  <a href="#dx">DX Cluster</a>
   <a href="#shop">Merch</a>
-  <a href="https://www.qrz.com/db/N2SNY" target="_blank">QRZ</a>
 </nav>
 
-<!-- HOME DASHBOARD -->
+<!-- HOME -->
 <section id="home">
 
   <div class="card">
     <h2>Live Solar Conditions</h2>
-    <p>Current space weather data:</p>
-
     <div style="text-align:center;">
       <a href="https://www.hamqsl.com/solar.html" target="_blank">
         <img src="https://www.hamqsl.com/solarvhf.php" style="max-width:100%; border-radius:10px;">
@@ -121,82 +169,121 @@ footer {
 
   <div class="card">
     <h2>Grayline Propagation</h2>
-    <p>Best DX zones across day/night line:</p>
-
     <div style="text-align:center;">
       <img src="https://www.hamqsl.com/solar101vhf.php" style="max-width:100%; border-radius:10px;">
     </div>
   </div>
 
+</section>
+
+<!-- QRZ LOOKUP -->
+<section id="lookup">
+  <div class="card">
+    <h2>QRZ Lookup</h2>
+
+    <input id="callsign" placeholder="Enter callsign (e.g. K4ABC)">
+    <button onclick="lookup()">Search QRZ</button>
+
+    <p id="result"></p>
+  </div>
+</section>
+
+<!-- DX CLUSTER -->
+<section id="dx">
   <div class="card">
     <h2>Live DX Cluster</h2>
-    <p>Real-time DX activity worldwide:</p>
 
     <p>
-      👉 Open live DX cluster here:<br><br>
-      <a href="https://dxwatch.com/" target="_blank" style="color:#58a6ff; font-size:18px;">
-        https://dxwatch.com
-      </a>
+      Open full cluster:
+      <a href="https://dxwatch.com/" target="_blank">DXWatch</a>
     </p>
+
+    <iframe
+      src="https://www.dxwatch.com/dxsd1/s.php"
+      width="100%"
+      height="450"
+      style="border:none;border-radius:10px;">
+    </iframe>
 
     <p style="font-size:0.9em;color:#8b949e;">
-      Some DX clusters block embedding. This direct link ensures it always works.
-    </p>
-  </div>
-
-</section>
-
-<section id="about">
-  <div class="card">
-    <h2>About Me</h2>
-    <p>Hello! I'm N2SNY, a ham radio operator based in South Carolina. I enjoy making contacts across the country and around the world.</p>
-    <p>Bands: HF / VHF / UHF</p>
-    <p>Modes: SSB, FT8, CW</p>
-    <p>
-      View my full station details on 
-      <a href="https://www.qrz.com/db/N2SNY" target="_blank" style="color:#58a6ff;">
-        QRZ.com
-      </a>.
+      If the feed fails, use the direct link above.
     </p>
   </div>
 </section>
 
-<section id="contact">
-  <div class="card">
-    <h2>Contact Me</h2>
-    <p>Send me a message or schedule a QSO:</p>
-
-    <form action="mailto:your@email.com" method="POST" enctype="text/plain">
-      <input type="text" name="name" placeholder="Your Name / Call Sign" required style="width:100%;padding:10px;margin:5px 0;"><br>
-      <input type="email" name="email" placeholder="Your Email" required style="width:100%;padding:10px;margin:5px 0;"><br>
-      <textarea name="message" placeholder="Message / QSO Details" required style="width:100%;padding:10px;margin:5px 0;"></textarea><br>
-      <button type="submit">Send</button>
-    </form>
-
-    <p style="font-size:0.9em;color:#8b949e;">
-      (Opens your email app for now)
-    </p>
-  </div>
-</section>
-
-<section id="log">
-  <div class="card">
-    <h2>Recent Contacts</h2>
-    <p>Coming soon: QRZ / LoTW log integration.</p>
-  </div>
-</section>
-
+<!-- SHOP -->
 <section id="shop">
   <div class="card">
     <h2>Merch Store</h2>
-    <p>Support the station—shirts, hats, and more coming soon.</p>
-    <button onclick="alert('Shop coming soon!')">Visit Store</button>
+
+    <a href="https://your-shopify-store.myshopify.com" target="_blank">
+      <button>Visit Store</button>
+    </a>
+
+    <p style="font-size:0.9em;color:#8b949e;">
+      Replace with your Shopify store when ready.
+    </p>
   </div>
 </section>
 
 <footer>
   <p>© 2026 N2SNY | 73!</p>
 </footer>
+
+<script>
+
+// ON AIR TOGGLE (persistent)
+function toggleStatus() {
+  const dot = document.getElementById("dot");
+  const text = document.getElementById("statusText");
+
+  if (text.innerText === "OFF AIR") {
+    text.innerText = "ON AIR";
+    dot.style.background = "#2ea043";
+    dot.style.boxShadow = "0 0 10px #2ea043";
+    localStorage.setItem("status", "on");
+  } else {
+    text.innerText = "OFF AIR";
+    dot.style.background = "#f85149";
+    dot.style.boxShadow = "0 0 10px #f85149";
+    localStorage.setItem("status", "off");
+  }
+}
+
+// LOAD STATUS
+window.onload = function () {
+  const saved = localStorage.getItem("status");
+  const dot = document.getElementById("dot");
+  const text = document.getElementById("statusText");
+
+  if (saved === "on") {
+    text.innerText = "ON AIR";
+    dot.style.background = "#2ea043";
+    dot.style.boxShadow = "0 0 10px #2ea043";
+  } else {
+    text.innerText = "OFF AIR";
+    dot.style.background = "#f85149";
+    dot.style.boxShadow = "0 0 10px #f85149";
+  }
+};
+
+// QRZ LOOKUP
+function lookup() {
+  const call = document.getElementById("callsign").value;
+  const result = document.getElementById("result");
+
+  if (!call) {
+    result.innerHTML = "Enter a callsign.";
+    return;
+  }
+
+  result.innerHTML =
+    `<a href="https://www.qrz.com/db/${call}" target="_blank">
+      Open QRZ page for ${call}
+    </a>`;
+}
+
+</script>
 
 </body>
 </html>
