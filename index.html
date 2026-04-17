@@ -30,8 +30,6 @@ body{
   color:var(--text);
 }
 
-/* HEADER */
-
 header{
   text-align:center;
   padding:20px;
@@ -63,8 +61,6 @@ header h1{
   box-shadow:0 0 10px #f85149;
 }
 
-/* NAV */
-
 nav{
   display:flex;
   flex-wrap:wrap;
@@ -85,8 +81,6 @@ nav a{
   border-radius:8px;
 }
 
-/* LAYOUT */
-
 section{
   max-width:1000px;
   margin:auto;
@@ -100,8 +94,6 @@ section{
   padding:16px;
   margin-bottom:16px;
 }
-
-/* INPUTS */
 
 input, textarea{
   width:100%;
@@ -122,8 +114,6 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-
-/* PROPAGATION GRID */
 
 .prop-grid{
   display:flex;
@@ -211,12 +201,12 @@ Solar Conditions
 <div class="prop-box">
 Grayline Map
 
-<!-- LONG-TERM FIXED GRAYLINE -->
-<img 
+<!-- BULLETPROOF GRAYLINE FIX -->
+<img
 id="graylineMap"
-src="https://www.hamqsl.com/grayline2.php"
+src="https://www.hamqsl.com/grayline2.php?cachebust=1"
 alt="Grayline Map"
-onerror="fixGrayline()">
+onerror="this.onerror=null; this.src='https://www.hamqsl.com/solar/grayline.php?cachebust=2';">
 
 </div>
 
@@ -326,22 +316,9 @@ function lookup(){
   window.open(`https://www.qrz.com/db/${c}`, "_blank");
 }
 
-/* DX CLUSTER BUTTON */
+/* DX CLUSTER */
 function openDXCluster(){
   window.open("https://www.dxwatch.com", "_blank");
-}
-
-/* LONG-TERM GRAYLINE FIX */
-function fixGrayline(){
-  const img = document.getElementById("graylineMap");
-
-  // fallback 1
-  img.src = "https://www.hamqsl.com/solar/grayline.php";
-
-  // fallback 2 if still fails
-  img.onerror = function(){
-    img.src = "https://www.hamqsl.com/solar2.php";
-  };
 }
 
 </script>
