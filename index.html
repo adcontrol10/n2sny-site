@@ -210,7 +210,14 @@ Solar Conditions
 
 <div class="prop-box">
 Grayline Map
-<img src="https://www.hamqsl.com/grayline2.php">
+
+<!-- LONG-TERM FIXED GRAYLINE -->
+<img 
+id="graylineMap"
+src="https://www.hamqsl.com/grayline2.php"
+alt="Grayline Map"
+onerror="fixGrayline()">
+
 </div>
 
 </div>
@@ -283,7 +290,7 @@ Open DX Cluster
 
 <script>
 
-/* ON AIR TOGGLE FIXED */
+/* ON AIR TOGGLE */
 let onAir = false;
 
 function toggleStatus(){
@@ -322,6 +329,19 @@ function lookup(){
 /* DX CLUSTER BUTTON */
 function openDXCluster(){
   window.open("https://www.dxwatch.com", "_blank");
+}
+
+/* LONG-TERM GRAYLINE FIX */
+function fixGrayline(){
+  const img = document.getElementById("graylineMap");
+
+  // fallback 1
+  img.src = "https://www.hamqsl.com/solar/grayline.php";
+
+  // fallback 2 if still fails
+  img.onerror = function(){
+    img.src = "https://www.hamqsl.com/solar2.php";
+  };
 }
 
 </script>
