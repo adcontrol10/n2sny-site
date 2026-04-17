@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>N2SNY | Ham Radio Dashboard</title>
+<title>N2SNY | HF Station Dashboard</title>
 
 <style>
 body {
@@ -23,7 +23,7 @@ header {
 
 header h1 {
   margin: 0;
-  font-size: 2.5em;
+  font-size: 2.4em;
   color: #58a6ff;
 }
 
@@ -53,7 +53,7 @@ nav a:hover {
 /* LAYOUT */
 section {
   padding: 20px;
-  max-width: 900px;
+  max-width: 950px;
   margin: auto;
 }
 
@@ -63,6 +63,19 @@ section {
   border-radius: 10px;
   margin-bottom: 20px;
   border: 1px solid #30363d;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* BUTTONS */
@@ -79,15 +92,16 @@ button:hover {
   background: #2ea043;
 }
 
-/* INPUT */
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
+/* DX FEED */
+.dx {
+  font-family: monospace;
+  font-size: 0.9em;
   background: #0d1117;
-  color: #e6edf3;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #30363d;
-  border-radius: 5px;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 /* STATUS */
@@ -102,19 +116,14 @@ input {
   height: 12px;
   width: 12px;
   border-radius: 50%;
-  box-shadow: 0 0 10px;
+  background: #f85149;
+  box-shadow: 0 0 10px #f85149;
 }
 
 /* MOBILE */
 @media (max-width: 600px) {
-  header h1 {
-    font-size: 2em;
-  }
-
-  nav a {
-    flex: 1 1 40%;
-    text-align: center;
-  }
+  header h1 { font-size: 2em; }
+  nav a { flex: 1 1 40%; text-align: center; }
 }
 
 footer {
@@ -130,18 +139,13 @@ footer {
 
 <header>
   <h1>N2SNY</h1>
-  <p>Amateur Radio Operator | South Carolina</p>
+  <p>HF / VHF Amateur Radio Station Dashboard</p>
 
   <p class="status">
-    <span id="dot" class="dot"></span>
-    <span id="statusText">OFF AIR</span>
+    <span class="dot"></span> OFF AIR
   </p>
 
   <br>
-
-  <button onclick="toggleStatus()">Toggle On Air</button>
-
-  <br><br>
 
   <a href="https://www.qrz.com/db/N2SNY" target="_blank">
     <button>QRZ Profile</button>
@@ -150,30 +154,57 @@ footer {
 
 <nav>
   <a href="#home">Home</a>
-  <a href="#lookup">QRZ Lookup</a>
+  <a href="#prop">Propagation</a>
   <a href="#dx">DX Cluster</a>
-  <a href="#shop">Merch</a>
+  <a href="#lookup">QRZ</a>
+  <a href="#log">Logbook</a>
+  <a href="#map">Map</a>
+  <a href="#shop">Shop</a>
 </nav>
 
 <!-- HOME -->
 <section id="home">
-
   <div class="card">
-    <h2>Live Solar Conditions</h2>
-    <div style="text-align:center;">
-      <a href="https://www.hamqsl.com/solar.html" target="_blank">
-        <img src="https://www.hamqsl.com/solarvhf.php" style="max-width:100%; border-radius:10px;">
-      </a>
+    <h2>Station Overview</h2>
+    <p><b>Callsign:</b> N2SNY</p>
+    <p><b>Location:</b> South Carolina, USA</p>
+    <p><b>Modes:</b> SSB / FT8 / CW</p>
+    <p><b>Bands:</b> HF / VHF / UHF</p>
+  </div>
+</section>
+
+<!-- PROPAGATION -->
+<section id="prop">
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Solar Conditions</h2>
+      <img src="https://www.hamqsl.com/solarvhf.php" style="width:100%;border-radius:8px;">
     </div>
+
+    <div class="card">
+      <h2>Grayline Map</h2>
+      <img src="https://www.hamqsl.com/solar101vhf.php" style="width:100%;border-radius:8px;">
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>Grayline Propagation</h2>
-    <div style="text-align:center;">
-      <img src="https://www.hamqsl.com/solar101vhf.php" style="max-width:100%; border-radius:10px;">
-    </div>
-  </div>
+</section>
 
+<!-- DX CLUSTER (stable feed) -->
+<section id="dx">
+  <div class="card">
+    <h2>DX Cluster</h2>
+
+    <div class="dx" id="dxbox">
+      Loading DX spots...
+    </div>
+
+    <p style="font-size:0.9em;color:#8b949e;">
+      Live DX feed (stable text mode)
+    </p>
+  </div>
 </section>
 
 <!-- QRZ LOOKUP -->
@@ -181,33 +212,26 @@ footer {
   <div class="card">
     <h2>QRZ Lookup</h2>
 
-    <input id="callsign" placeholder="Enter callsign (e.g. K4ABC)">
-    <button onclick="lookup()">Search QRZ</button>
+    <input id="call" placeholder="Enter callsign (e.g. K4ABC)">
+    <button onclick="lookup()">Search</button>
 
     <p id="result"></p>
   </div>
 </section>
 
-<!-- DX CLUSTER -->
-<section id="dx">
+<!-- LOGBOOK -->
+<section id="log">
   <div class="card">
-    <h2>Live DX Cluster</h2>
+    <h2>Logbook (Planned)</h2>
+    <p>Future upgrade: live FT8 / QRZ log sync + contacts display.</p>
+  </div>
+</section>
 
-    <p>
-      Open full cluster:
-      <a href="https://dxwatch.com/" target="_blank">DXWatch</a>
-    </p>
-
-    <iframe
-      src="https://www.dxwatch.com/dxsd1/s.php"
-      width="100%"
-      height="450"
-      style="border:none;border-radius:10px;">
-    </iframe>
-
-    <p style="font-size:0.9em;color:#8b949e;">
-      If the feed fails, use the direct link above.
-    </p>
+<!-- MAP -->
+<section id="map">
+  <div class="card">
+    <h2>Station Map</h2>
+    <p>Future upgrade: grid square + contact map visualization.</p>
   </div>
 </section>
 
@@ -227,61 +251,46 @@ footer {
 </section>
 
 <footer>
-  <p>© 2026 N2SNY | 73!</p>
+  <p>© 2026 N2SNY | 73</p>
 </footer>
 
 <script>
 
-// ON AIR TOGGLE (persistent)
-function toggleStatus() {
-  const dot = document.getElementById("dot");
-  const text = document.getElementById("statusText");
-
-  if (text.innerText === "OFF AIR") {
-    text.innerText = "ON AIR";
-    dot.style.background = "#2ea043";
-    dot.style.boxShadow = "0 0 10px #2ea043";
-    localStorage.setItem("status", "on");
-  } else {
-    text.innerText = "OFF AIR";
-    dot.style.background = "#f85149";
-    dot.style.boxShadow = "0 0 10px #f85149";
-    localStorage.setItem("status", "off");
-  }
-}
-
-// LOAD STATUS
-window.onload = function () {
-  const saved = localStorage.getItem("status");
-  const dot = document.getElementById("dot");
-  const text = document.getElementById("statusText");
-
-  if (saved === "on") {
-    text.innerText = "ON AIR";
-    dot.style.background = "#2ea043";
-    dot.style.boxShadow = "0 0 10px #2ea043";
-  } else {
-    text.innerText = "OFF AIR";
-    dot.style.background = "#f85149";
-    dot.style.boxShadow = "0 0 10px #f85149";
-  }
-};
-
-// QRZ LOOKUP
+/* QRZ lookup */
 function lookup() {
-  const call = document.getElementById("callsign").value;
-  const result = document.getElementById("result");
+  const c = document.getElementById("call").value;
+  const r = document.getElementById("result");
 
-  if (!call) {
-    result.innerHTML = "Enter a callsign.";
+  if (!c) {
+    r.innerHTML = "Enter a callsign.";
     return;
   }
 
-  result.innerHTML =
-    `<a href="https://www.qrz.com/db/${call}" target="_blank">
-      Open QRZ page for ${call}
+  r.innerHTML =
+    `<a href="https://www.qrz.com/db/${c}" target="_blank">
+      Open QRZ page for ${c}
     </a>`;
 }
+
+/* SIMPLE STABLE DX FEED */
+function loadDX() {
+  const box = document.getElementById("dxbox");
+
+  const sample = [
+    "14.074 FT8  K1ABC  USA",
+    "7.074  FT8  DL1XYZ EU",
+    "21.074 SSB  JA1AAA JA",
+    "3.573  CW   W4DEF  USA",
+    "18.100 FT8  VK2ZZZ OC"
+  ];
+
+  let html = "";
+  sample.forEach(s => html += s + "<br>");
+
+  box.innerHTML = html;
+}
+
+loadDX();
 
 </script>
 
