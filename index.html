@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N2SNY | Amateur Radio</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+header {
+  background: #161b22;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid #30363d;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #58a6ff;
+}
+
+nav {
+  text-align: center;
+  padding: 10px;
+  background: #21262d;
+}
+
+nav a {
+  color: #e6edf3;
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #58a6ff;
+}
+
+section {
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: #161b22;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #30363d;
+}
+
+button {
+  background: #238636;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2ea043;
+}
+
+input, textarea {
+  background: #0d1117;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  border-radius: 5px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #161b22;
+  border-top: 1px solid #30363d;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>N2SNY</h1>
+  <p>Amateur Radio Operator | South Carolina</p>
+  <br>
+  <a href="https://www.qrz.com/db/N2SNY" target="_blank">
+    <button>View My QRZ Profile</button>
+  </a>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+  <a href="#log">Radio Log</a>
+  <a href="#shop">Merch</a>
+  <a href="https://www.qrz.com/db/N2SNY" target="_blank">QRZ</a>
+</nav>
+
+<section id="home">
+
+  <div class="card">
+    <h2>Live Solar Conditions</h2>
+    <p>Current space weather data:</p>
+
+    <div style="text-align:center;">
+      <a href="https://www.hamqsl.com/solar.html" target="_blank">
+        <img src="https://www.hamqsl.com/solarvhf.php" style="max-width:100%; border-radius:10px;">
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Grayline Map</h2>
+    <p>Day/Night propagation across the globe:</p>
+
+    <div style="text-align:center;">
+      <img src="https://www.hamqsl.com/solar101vhf.php" style="max-width:100%; border-radius:10px;">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Live DX Cluster</h2>
+    <p>Real-time DX spots worldwide:</p>
+
+    <iframe 
+      src="https://www.dxwatch.com/dxsd1/s.php"
+      width="100%" 
+      height="400"
+      style="border:none; border-radius:10px;">
+    </iframe>
+
+    <p style="font-size:0.9em;color:#8b949e;">
+      Live DX data feed.
+    </p>
+  </div>
+
+</section>
+
+<section id="about">
+  <div class="card">
+    <h2>About Me</h2>
+    <p>Hello! I'm N2SNY, a ham radio operator based in South Carolina. I enjoy making contacts across the country and around the world.</p>
+    <p>Bands: HF / VHF / UHF</p>
+    <p>Modes: SSB, FT8, CW</p>
+    <p>
+      View my full station details on 
+      <a href="https://www.qrz.com/db/N2SNY" target="_blank" style="color:#58a6ff;">
+        QRZ.com
+      </a>.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="card">
+    <h2>Contact Me</h2>
+    <p>Want to schedule a QSO or reach out? Send me a message:</p>
+
+    <form action="mailto:your@email.com" method="POST" enctype="text/plain">
+      <input type="text" name="name" placeholder="Your Name / Call Sign" required style="width:100%;padding:10px;margin:5px 0;"><br>
+      <input type="email" name="email" placeholder="Your Email" required style="width:100%;padding:10px;margin:5px 0;"><br>
+      <textarea name="message" placeholder="Message / QSO Details" required style="width:100%;padding:10px;margin:5px 0;"></textarea><br>
+      <button type="submit">Send</button>
+    </form>
+
+    <p style="font-size:0.9em;color:#8b949e;">
+      (This will open your email app. We can upgrade this later.)
+    </p>
+  </div>
+</section>
+
+<section id="log">
+  <div class="card">
+    <h2>Recent Contacts</h2>
+    <p>Coming soon: Logbook integration (LoTW, QRZ, etc.)</p>
+  </div>
+</section>
+
+<section id="shop">
+  <div class="card">
+    <h2>Merch Store</h2>
+    <p>Support the station! Shirts, hats, and more coming soon.</p>
+    <button onclick="alert('Shop coming soon!')">Visit Store</button>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 N2SNY | 73!</p>
+</footer>
+
+</body>
+</html>
