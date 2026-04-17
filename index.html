@@ -6,7 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>N2SNY | Ham Radio Dashboard</title>
 
-<meta name="description" content="N2SNY Amateur Radio Station Dashboard">
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("cV6zheGX2dTrebJ1f"); 
+})();
+</script>
 
 <style>
 
@@ -16,12 +22,10 @@
   --border:#243041;
   --text:#e6edf3;
   --muted:#8b949e;
+  --blue:#58a6ff;
   --green:#2ea043;
   --red:#f85149;
-  --blue:#58a6ff;
 }
-
-html{scroll-behavior:smooth;}
 
 body{
   margin:0;
@@ -41,24 +45,6 @@ header{
 header h1{
   margin:0;
   color:var(--blue);
-  font-size:2.3em;
-}
-
-.status{
-  margin-top:10px;
-  font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-}
-
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#f85149;
-  box-shadow:0 0 10px #f85149;
 }
 
 nav{
@@ -74,8 +60,8 @@ nav{
 }
 
 nav a{
-  text-decoration:none;
   color:var(--text);
+  text-decoration:none;
   padding:8px 12px;
   background:rgba(255,255,255,0.05);
   border-radius:8px;
@@ -95,10 +81,35 @@ section{
   margin-bottom:16px;
 }
 
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+}
+
+.box{
+  background:#0f1620;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.metric{
+  font-size:1.6em;
+  font-weight:bold;
+}
+
+.small{
+  color:var(--muted);
+  font-size:0.9em;
+}
+
 input, textarea{
   width:100%;
   padding:10px;
-  margin:6px 0;
+  margin-top:6px;
+  margin-bottom:10px;
   border-radius:8px;
   border:1px solid var(--border);
   background:#0b0f14;
@@ -115,50 +126,29 @@ button{
   cursor:pointer;
 }
 
-.prop-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-}
-
-.prop-box{
-  width:220px;
-  background:#0f1620;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:8px;
-}
-
-img{
-  width:100%;
-  height:130px;
-  object-fit:contain;
-}
-
-footer{
-  text-align:center;
-  padding:16px;
-  color:var(--muted);
-  border-top:1px solid var(--border);
-}
-
 </style>
+
 </head>
 
 <body>
 
 <header onclick="toggleStatus()">
 
-<h1>N2SNY</h1>
-<p>Amateur Radio Station Dashboard</p>
+<h1>N2SNY Ham Radio Dashboard</h1>
+<p>Station Control Panel</p>
 
-<div class="status">
-  <span id="dot" class="dot"></span>
+<div style="margin-top:10px;font-weight:bold;">
+  <span id="dot" style="
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#f85149;
+    box-shadow:0 0 10px #f85149;
+    margin-right:8px;
+  "></span>
   <span id="statusText">OFF AIR</span>
 </div>
-
-<p id="utcClock"></p>
 
 </header>
 
@@ -168,46 +158,58 @@ footer{
 <a href="#dx">DX Cluster</a>
 <a href="#lookup">QRZ</a>
 <a href="#contact">Contact</a>
-<a href="#shop">Shop</a>
 </nav>
 
-<!-- HOME -->
 <section id="home">
 <div class="card">
 <h2>Station Info</h2>
-
 <p><b>Callsign:</b> N2SNY</p>
 <p><b>Location:</b> South Carolina</p>
-<p><b>Grid Square:</b> EM94</p>
-<p><b>Modes:</b> SSB / FT8 / CW</p>
-<p><b>Bands:</b> HF / VHF / UHF</p>
-
+<p><b>Grid:</b> EM94</p>
 </div>
 </section>
 
-<!-- PROPAGATION -->
 <section id="prop">
 <div class="card">
 
-<h2>Propagation</h2>
+<h2>Propagation Dashboard</h2>
 
-<div class="prop-grid">
+<div class="grid">
 
-<div class="prop-box">
-Solar Conditions
-<img src="https://www.hamqsl.com/solar2.php">
+<div class="box">
+K Index
+<div class="metric" id="kIndex">--</div>
+<div class="small" id="kStatus">Loading...</div>
 </div>
 
-<div class="prop-box">
-Grayline Map
+<div class="box">
+Solar Wind
+<div class="metric" id="solarWind">--</div>
+<div class="small">km/s</div>
+</div>
 
-<!-- BULLETPROOF GRAYLINE FIX -->
-<img
-id="graylineMap"
-src="https://www.hamqsl.com/grayline2.php?cachebust=1"
-alt="Grayline Map"
-onerror="this.onerror=null; this.src='https://www.hamqsl.com/solar/grayline.php?cachebust=2';">
+<div class="box">
+Solar Flux
+<div class="metric" id="solarFlux">--</div>
+<div class="small">SFI</div>
+</div>
 
+<div class="box">
+A Index
+<div class="metric" id="aIndex">--</div>
+<div class="small">Geomagnetic</div>
+</div>
+
+<div class="box">
+Aurora
+<div class="metric" id="aurora">--</div>
+<div class="small">Activity</div>
+</div>
+
+<div class="box">
+Band Status
+<div class="metric" id="bands">--</div>
+<div class="small">HF Conditions</div>
 </div>
 
 </div>
@@ -215,43 +217,32 @@ onerror="this.onerror=null; this.src='https://www.hamqsl.com/solar/grayline.php?
 </div>
 </section>
 
-<!-- DX CLUSTER -->
 <section id="dx">
 <div class="card">
-
 <h2>DX Cluster</h2>
-
-<p>Live DX spotting network</p>
-
-<button onclick="openDXCluster()">
+<button onclick="window.open('https://www.dxwatch.com','_blank')">
 Open DX Cluster
 </button>
-
 </div>
 </section>
 
-<!-- QRZ -->
 <section id="lookup">
 <div class="card">
-
-<h2>QRZ Callsign Lookup</h2>
-
+<h2>QRZ Lookup</h2>
 <input id="call" placeholder="Enter callsign">
-<button onclick="lookup()">Search QRZ</button>
-
+<button onclick="lookup()">Search</button>
 </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
 <div class="card">
 
 <h2>Contact N2SNY</h2>
 
-<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+<form id="contactForm">
 
 <input name="name" placeholder="Name / Callsign" required>
-<input name="email" type="email" placeholder="Email" required>
+<input name="email" type="email" placeholder="Your Email" required>
 <textarea name="message" placeholder="Message" required></textarea>
 
 <button type="submit">Send Message</button>
@@ -261,65 +252,87 @@ Open DX Cluster
 </div>
 </section>
 
-<!-- SHOP -->
-<section id="shop">
-<div class="card">
-
-<h2>Merch Store</h2>
-
-<a href="https://your-shopify-store.myshopify.com" target="_blank">
-<button>Visit Store</button>
-</a>
-
-</div>
-</section>
-
-<footer>
-© 2026 N2SNY | 73
-</footer>
-
 <script>
 
-/* ON AIR TOGGLE */
-let onAir = false;
+/* ON AIR */
+let onAir=false;
 
 function toggleStatus(){
-  onAir = !onAir;
+  const dot=document.getElementById("dot");
+  const text=document.getElementById("statusText");
 
-  const dot = document.getElementById("dot");
-  const text = document.getElementById("statusText");
+  onAir=!onAir;
 
   if(onAir){
-    dot.style.background = "#2ea043";
-    dot.style.boxShadow = "0 0 10px #2ea043";
-    text.textContent = "ON AIR";
-  } else {
-    dot.style.background = "#f85149";
-    dot.style.boxShadow = "0 0 10px #f85149";
-    text.textContent = "OFF AIR";
+    dot.style.background="#2ea043";
+    dot.style.boxShadow="0 0 10px #2ea043";
+    text.innerText="ON AIR";
+  }else{
+    dot.style.background="#f85149";
+    dot.style.boxShadow="0 0 10px #f85149";
+    text.innerText="OFF AIR";
   }
 }
 
-/* UTC CLOCK */
-function updateUTC(){
-  const now = new Date();
-  document.getElementById("utcClock").innerText =
-    "UTC: " + now.toUTCString().split(" ")[4];
-}
-setInterval(updateUTC,1000);
-updateUTC();
-
-/* QRZ LOOKUP */
+/* QRZ */
 function lookup(){
-  const c = document.getElementById("call").value.trim();
+  const c=document.getElementById("call").value.trim();
   if(!c) return;
-  window.open(`https://www.qrz.com/db/${c}`, "_blank");
+  window.open(`https://www.qrz.com/db/${c}`,"_blank");
 }
 
-/* DX CLUSTER */
-function openDXCluster(){
-  window.open("https://www.dxwatch.com", "_blank");
+/* EMAILJS SAFE */
+document.getElementById("contactForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.send(
+    "service_cplezvr",
+    "template_3lr8pqj",
+    {
+      name: this.name.value,
+      email: this.email.value,
+      message: this.message.value
+    }
+  ).then(() => {
+    alert("Message sent — 73!");
+    this.reset();
+  }).catch(err=>{
+    alert("Send failed");
+    console.log(err);
+  });
+
+});
+
+/* PROPAGATION SAFE */
+async function loadPropagation(){
+  try{
+    const r=await fetch("https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json");
+    const data=await r.json();
+
+    let kp=0;
+    for(let i=data.length-1;i>=0;i--){
+      let v=parseFloat(data[i][1]);
+      if(!isNaN(v)){ kp=v; break; }
+    }
+
+    document.getElementById("kIndex").innerText=kp.toFixed(1);
+
+    let state="Quiet";
+    if(kp>=5) state="Storm";
+    else if(kp>=4) state="Unsettled";
+
+    document.getElementById("kStatus").innerText=state;
+    document.getElementById("aIndex").innerText=Math.round(kp*7);
+    document.getElementById("bands").innerText=kp>=5?"Poor":kp>=4?"Fair":"Good";
+
+  }catch(e){
+    document.getElementById("kIndex").innerText="0";
+    document.getElementById("kStatus").innerText="Offline";
+  }
 }
+
+loadPropagation();
+setInterval(loadPropagation,60000);
 
 </script>
 
